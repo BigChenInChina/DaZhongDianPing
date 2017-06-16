@@ -4,7 +4,6 @@
     android:id="@+id/activity_guide"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
     tools:context="com.liuchen.dazhongdianping.UI.GuideActivity">
 
 

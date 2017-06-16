@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".UI.GuideActivity" />
+        <activity android:name=".UI.CityActivity"></activity>
     </application>
 
 </manifest>
