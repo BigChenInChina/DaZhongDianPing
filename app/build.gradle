@@ -33,4 +33,17 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile project(':viewpagerIndicator_library')
     compile project(':pullToRefresh_Library')
+    compile files('libs/commons-codec-1.10.jar')
+    compile files('libs/converter-gson-2.3.0.jar')
+    compile files('libs/converter-scalars-2.3.0.jar')
+    compile files('libs/gson-2.8.0.jar')
+    compile files('libs/okhttp-3.8.0.jar')
+    compile files('libs/okio-1.13.0.jar')
+    compile files('libs/picasso-2.5.2.jar')
+    compile files('libs/retrofit-2.3.0.jar')
+    compile files('libs/volley.jar')
+    compile files('libs/ormlite-android-5.0.jar')
+    compile files('libs/ormlite-core-5.0.jar')
+    compile files('libs/pinyin4j-2.5.1.jar')
+    compile 'com.android.support:recyclerview-v7:25+'
 }

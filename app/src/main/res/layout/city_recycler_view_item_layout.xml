@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_marginBottom="2dp">
+    <TextView
+        android:id="@+id/city_item_Letter"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:text="A"
+        android:textSize="20sp"
+        android:paddingLeft="10dp"
+        android:paddingTop="3dp"/>
+
+    <TextView
+        android:background="@color/colorWhite"
+        android:id="@+id/city_item_CityName"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="阿巴嘎旗"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"
+        android:paddingTop="3dp"/>
+
+</RelativeLayout>
