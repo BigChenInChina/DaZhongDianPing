@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
     @OnClick(R.id.ll_header_left_container)
     public void jumpToCity(View view) {
         Intent intent = new Intent(this, CityActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,101);
     }
 
     @OnClick(R.id.main_head_add)
@@ -85,7 +85,6 @@ public class MainActivity extends Activity {
         listView = PTRlv_main_list.getRefreshableView();
         datas = new ArrayList<TuanEntity.Deal>();
         adapter = new DealAdapter(this, datas);
-
         //为ListView添加若干个头部
         LayoutInflater inflater = LayoutInflater.from(this);
 
@@ -115,13 +114,13 @@ public class MainActivity extends Activity {
                         adapter.notifyDataSetChanged();
                         PTRlv_main_list.onRefreshComplete();
                     }
-                },3000);*/
+                },1500);*/
                 refresh();
             }
         });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int i) {
+            public void onScrollStateChanged(AbsListView absListView, int i) {
             }
 
             @Override
@@ -149,7 +148,7 @@ public class MainActivity extends Activity {
 
             @Override
             public int getCount() {
-                return 3000;
+                return 30000;
             }
 
             @Override
@@ -160,7 +159,8 @@ public class MainActivity extends Activity {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 int layoutId = resIDs[position % 3];
-                View view = LayoutInflater.from(MainActivity.this).inflate(layoutId, viewPager, false);
+                View view = LayoutInflater.from(MainActivity.this).
+                        inflate(layoutId, viewPager, false);
                 container.addView(view);
                 return view;
             }
@@ -174,9 +174,12 @@ public class MainActivity extends Activity {
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(15000);
 
-        final ImageView iv1 = (ImageView) listHeaderIcons.findViewById(R.id.iv_header_list_icons_indicator1);
-        final ImageView iv2 = (ImageView) listHeaderIcons.findViewById(R.id.iv_header_list_icons_indicator2);
-        final ImageView iv3 = (ImageView) listHeaderIcons.findViewById(R.id.iv_header_list_icons_indicator3);
+        final ImageView iv1 = (ImageView) listHeaderIcons.findViewById
+                (R.id.iv_header_list_icons_indicator1);
+        final ImageView iv2 = (ImageView) listHeaderIcons.findViewById
+                (R.id.iv_header_list_icons_indicator2);
+        final ImageView iv3 = (ImageView) listHeaderIcons.findViewById
+                (R.id.iv_header_list_icons_indicator3);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -213,6 +216,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+//        String city = getIntent().getStringExtra("city");
+//        if(!TextUtils.isEmpty(city)) {
+//            tvCity.setText(city);
+//        }else{
+//            tvCity.setText("北京");
+//        }
         refresh();
     }
 
@@ -282,5 +291,15 @@ public class MainActivity extends Activity {
         //HttpUtil.testVolley();
         //HttpUtil.testRetrofit();
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK && requestCode==101){
+            String city = data.getStringExtra("city");
+            Log.i("TAG","123456"+city);
+            tvCity.setText(city);
+        }
     }
 }

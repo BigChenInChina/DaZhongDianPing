@@ -55,6 +55,7 @@
         android:layout_marginEnd="10dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:orientation="horizontal"
         android:layout_gravity="center_vertical"
         android:backgroundTint="@color/colorWhite"
         android:background="@drawable/round_corner_border">
@@ -65,19 +66,25 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/navibar_icon_search" />
+            android:src="@drawable/navibar_search_icon_search" />
 
-        <EditText
+        <TextView
             android:background="@null"
-            android:id="@+id/main_head_et_search"
+            android:id="@+id/city_head_tv_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:hint="输入商户名、地点"
+            android:gravity="center_vertical"
+            android:text="输入商户名、地点"
             android:textColor="@color/colorGray"
             android:textSize="15sp" />
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ffffff"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/city_recyclerView"
         android:layout_width="match_parent"
