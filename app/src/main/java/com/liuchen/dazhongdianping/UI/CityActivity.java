@@ -70,6 +70,7 @@ public class CityActivity extends Activity {
                     }
                     //RecyclerView移动到第position个视图位置
                     //且该视图位于当前RecyclerView最顶端
+                    //abc
                     //当移动完毕后，如何设置offset值(非0)，则偏移offset个像素
                     //如果大于0就往下偏移，如果小于0就往上偏移
                     manager.scrollToPositionWithOffset(position,0);
