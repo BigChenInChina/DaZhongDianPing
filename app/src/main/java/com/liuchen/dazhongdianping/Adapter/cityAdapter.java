@@ -49,6 +49,9 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.MyViewHolder> 
             throw new RuntimeException("不允许添加多个头部");
         }
     }
+    public View getHeaderView(){
+        return headerView;
+    }
 
     @Override
     public int getItemViewType(int position) {

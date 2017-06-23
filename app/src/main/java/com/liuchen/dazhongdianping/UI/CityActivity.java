@@ -17,6 +17,7 @@ import com.liuchen.dazhongdianping.R;
 import com.liuchen.dazhongdianping.Util.DBUtil;
 import com.liuchen.dazhongdianping.Util.HttpUtil;
 import com.liuchen.dazhongdianping.Util.PinYinUtil;
+import com.liuchen.dazhongdianping.View.MyLetterView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +42,9 @@ public class CityActivity extends Activity {
 
     DBUtil dbUtil;
 
+    @BindView(R.id.mlv_city)
+    MyLetterView myLetterView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,30 @@ public class CityActivity extends Activity {
         dbUtil = new DBUtil(this);
         ButterKnife.bind(this);
         initialRecyclerView();
+
+        myLetterView.setOnTouchLetterListener(new MyLetterView.OnTouchLetterListener() {
+            @Override
+            public void onTouchLetter(MyLetterView view, String letter) {
+                LinearLayoutManager manager = (LinearLayoutManager)cityRecyclerView.getLayoutManager();
+                if ("热门".equals(letter)){
+                    manager.scrollToPosition(0);
+                }else {
+                    int position = adapter.getPositionForSection(letter.charAt(0));
+//                    int first = manager.findFirstVisibleItemPosition();
+//                    int last = manager.findLastVisibleItemPosition();
+//
+//                    manager.scrollToPositionWithOffset(position+1,last-first);
+                    if(adapter.getHeaderView()!=null){
+                        position += 1;
+                    }
+                    //RecyclerView移动到第position个视图位置
+                    //且该视图位于当前RecyclerView最顶端
+                    //当移动完毕后，如何设置offset值(非0)，则偏移offset个像素
+                    //如果大于0就往下偏移，如果小于0就往上偏移
+                    manager.scrollToPositionWithOffset(position,0);
+                }
+            }
+        });
     }
 
     private void initialRecyclerView() {
@@ -81,38 +109,12 @@ public class CityActivity extends Activity {
         super.onResume();
         refresh();
     }
-    @OnClick(R.id.city_back)
-    public void backMainActivity(View view){
-        Intent intent = new Intent(CityActivity.this,MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    @OnClick(R.id.city_head_tv_search)
-    public void jumpToCity(View view) {
-        Intent intent = new Intent(CityActivity.this, SearchActivity.class);
-        startActivityForResult(intent,101);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_OK && requestCode == 101){
-//            Intent data2 = new Intent();
-//            String city = data.getStringExtra("city");
-//            data2.putExtra("city",city);
-            setResult(RESULT_OK,data);
-            finish();
-        }
-    }
-
     private void refresh() {
         if (MyApp.cityNameEntityList != null && MyApp.cityNameEntityList.size() > 0){
             adapter.addAll(MyApp.cityNameEntityList,true);
             Log.d("TAG", "数据从缓存中读取 ");
             return;
         }
-
 
         List<CityNameEntity> list = dbUtil.query();
         if (list != null &&list.size() > 0){
@@ -164,5 +166,30 @@ public class CityActivity extends Activity {
             public void onFailure(Call<CityEntity> call, Throwable throwable) {
             }
         });
+    }
+
+    @OnClick(R.id.city_back)
+    public void backMainActivity(View view){
+        Intent intent = new Intent(CityActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @OnClick(R.id.city_head_tv_search)
+    public void jumpToCity(View view) {
+        Intent intent = new Intent(CityActivity.this,SearchActivity.class);
+        startActivityForResult(intent,101);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK && requestCode==101){
+//            Intent data2 = new Intent();
+//            String city = data.getStringExtra("city");
+//            data2.putExtra("city",city);
+            setResult(RESULT_OK,data);
+            finish();
+        }
     }
 }

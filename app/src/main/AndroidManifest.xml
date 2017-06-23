@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".UI.GuideActivity" />
         <activity android:name=".UI.CityActivity" />
-        <activity android:name=".UI.SearchActivity"></activity>
+        <activity android:name=".UI.SearchActivity" />
+        <activity android:name=".UI.BusinessActivity"></activity>
     </application>
 
 </manifest>
