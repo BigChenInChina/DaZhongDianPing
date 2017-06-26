@@ -137,7 +137,8 @@ public class MainActivity extends Activity {
     }
 
     private void initialListHeaderIcons(View listHeaderIcons) {
-        final ViewPager viewPager = (ViewPager) listHeaderIcons.findViewById(R.id.main_head_app_viewPager);
+        final ViewPager viewPager = (ViewPager) listHeaderIcons.findViewById
+                (R.id.main_head_app_viewPager);
 
         PagerAdapter adapter = new PagerAdapter() {
             int[] resIDs = new int[]{
@@ -161,6 +162,19 @@ public class MainActivity extends Activity {
                 int layoutId = resIDs[position % 3];
                 View view = LayoutInflater.from(MainActivity.this).
                         inflate(layoutId, viewPager, false);
+                if(position%3==0){
+
+                    View foodView = view.findViewById(R.id.app_food);
+                    foodView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(MainActivity.this,BusinessActivity.class);
+                            intent.putExtra("city",tvCity.getText().toString());
+                            startActivity(intent);
+
+                        }
+                    });
+                }
                 container.addView(view);
                 return view;
             }

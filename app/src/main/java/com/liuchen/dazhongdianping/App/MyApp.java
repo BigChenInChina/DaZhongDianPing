@@ -3,6 +3,7 @@ package com.liuchen.dazhongdianping.App;
 import android.app.Application;
 
 import com.liuchen.dazhongdianping.Entity.CityNameEntity;
+import com.liuchen.dazhongdianping.Util.SPUtil;
 
 import java.util.List;
 
@@ -19,5 +20,7 @@ public class MyApp extends Application{
     public void onCreate() {
         super.onCreate();
         CONTEXT = this;
+        SPUtil spUtil = new SPUtil(this);
+        spUtil.setCloseBanner(false);
     }
 }

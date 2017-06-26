@@ -65,6 +65,7 @@
         android:layout_height="0.5dp"
         android:background="#acacac"/>
     <LinearLayout
+        android:background="@color/colorWhite"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
@@ -74,6 +75,7 @@
             android:layout_weight="1"
             android:gravity="center">
             <TextView
+                android:id="@+id/tv_business_tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="附近"
@@ -95,6 +97,7 @@
             android:layout_weight="1"
             android:gravity="center">
             <TextView
+                android:id="@+id/tv_business_tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="美食"
@@ -116,6 +119,7 @@
             android:layout_weight="1.2"
             android:gravity="center">
             <TextView
+                android:id="@+id/tv_business_tv3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="智能排序"
@@ -137,6 +141,7 @@
             android:layout_weight="1"
             android:gravity="center">
             <TextView
+                android:id="@+id/tv_business_tv4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="筛选"
@@ -153,13 +158,26 @@
         android:layout_height="0.5dp"
         android:background="#acacac"/>
 
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
     <ListView
         android:id="@+id/business_listView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
+        android:layout_height="match_parent">
     </ListView>
+    <ImageView
+        android:id="@+id/iv_business_loading"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:src="@drawable/refreshing"/>
+    <include
+        android:id="@+id/district_layout"
+        layout="@layout/district_select_layout"
+        android:visibility="invisible"/>
+</FrameLayout>
 
     <View
         android:layout_width="match_parent"
@@ -168,7 +186,8 @@
     <LinearLayout
         android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="30dp"
+        android:background="#ffececec">
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -181,6 +200,7 @@
             android:layout_height="wrap_content"
             android:text="中南海一号"
             android:textColor="#7d7d7d"/>
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"

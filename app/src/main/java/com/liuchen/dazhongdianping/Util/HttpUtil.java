@@ -5,7 +5,9 @@ import android.widget.ImageView;
 
 import com.android.volley.Response;
 import com.liuchen.dazhongdianping.App.MyApp;
+import com.liuchen.dazhongdianping.Entity.BusinessEntity;
 import com.liuchen.dazhongdianping.Entity.CityEntity;
+import com.liuchen.dazhongdianping.Entity.DistrictEntity;
 import com.liuchen.dazhongdianping.Entity.TuanEntity;
 import com.liuchen.dazhongdianping.R;
 import com.squareup.picasso.MemoryPolicy;
@@ -48,7 +50,6 @@ import retrofit2.Callback;
 public class HttpUtil {
     public static final String APPKEY = "49814079";
     public static final String APPSECRET = "90e3438a41d646848033b6b9d461ed54";
-
 
     public static String getURL(String url, Map<String, String> params) {
 
@@ -162,4 +163,21 @@ public class HttpUtil {
     public static void getCitiesByVolley(Response.Listener<String> listener){
         VolleyClient.getInstance().getCities(listener);
     }
+    public static void getFoodsByVolley(String city, String region, Response.Listener<String> listener){
+        VolleyClient.getInstance().getFoods(city,region,listener);
+    }
+
+    public static void getFoodsByRetrofit(String city, String region, Callback<BusinessEntity> callback){
+        RetrofitClient.getInstance().getFoods(city,region,callback);
+    }
+    public static void getDistrictsByVolley(String city, Response.Listener<String> listener){
+
+        VolleyClient.getInstance().getDistricts(city,listener);
+
+    }
+
+    public static void getDistrictsByRetrofit(String city, Callback<DistrictEntity> callback){
+        RetrofitClient.getInstance().getDistricts(city,callback);
+    }
+
 }

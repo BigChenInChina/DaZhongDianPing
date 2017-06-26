@@ -1,10 +1,13 @@
 package com.liuchen.dazhongdianping.Util;
 
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.liuchen.dazhongdianping.Config.Constant;
+import com.liuchen.dazhongdianping.Entity.BusinessEntity;
 import com.liuchen.dazhongdianping.Entity.CityEntity;
+import com.liuchen.dazhongdianping.Entity.DistrictEntity;
 import com.liuchen.dazhongdianping.Entity.TuanEntity;
 
 import org.json.JSONArray;
@@ -230,6 +233,26 @@ public class RetrofitClient {
     public void getCities(Callback<CityEntity> callback){
         Call<CityEntity> call = netService.getCities();
         call.enqueue(callback);
+    }
+    public void getFoods(String city, String region, Callback<BusinessEntity> callback){
+
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("city",city);
+        params.put("category","美食");
+        if(!TextUtils.isEmpty(region)){
+            params.put("region",region);
+        }
+        Call<BusinessEntity> call = netService.getFoods(params);
+        call.enqueue(callback);
+
+    }
+    public void getDistricts(String city, Callback<DistrictEntity> callback){
+
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("city",city);
+        Call<DistrictEntity> call = netService.getDistricts(params);
+        call.enqueue(callback);
+
     }
 
     public class MyOkHttpInterceptor implements Interceptor{

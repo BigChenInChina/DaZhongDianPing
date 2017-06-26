@@ -1,6 +1,8 @@
 package com.liuchen.dazhongdianping.Util;
 
+import com.liuchen.dazhongdianping.Entity.BusinessEntity;
 import com.liuchen.dazhongdianping.Entity.CityEntity;
+import com.liuchen.dazhongdianping.Entity.DistrictEntity;
 import com.liuchen.dazhongdianping.Entity.TuanEntity;
 
 import java.util.Map;
@@ -39,5 +41,11 @@ public interface NetService {
 
     @GET("metadata/get_cities_with_businesses")
     public Call<CityEntity> getCities();
+    @GET("business/find_businesses")
+    public Call<BusinessEntity>
+    getFoods(@QueryMap Map<String,String> params);
+    @GET("metadata/get_regions_with_businesses")
+    public Call<DistrictEntity>
+    getDistricts(@QueryMap Map<String,String> params);
 
 }
