@@ -1,6 +1,7 @@
 package com.liuchen.dazhongdianping.UI;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,26 +41,31 @@ public class BusinessActivity extends Activity {
 
     @BindView(R.id.iv_business_loading)
     ImageView ivLoading;
+
     @BindView(R.id.district_layout)
     View districtLayout;
+
     @BindView(R.id.lv_business_select_left)
     ListView leftListView;
     @BindView(R.id.lv_business_select_right)
     ListView rightListView;
+
     List<String> leftDatas;
     List<String> rightDatas;
+
     ArrayAdapter<String> leftAdapter;
     ArrayAdapter<String> rightAdapter;
     List<DistrictEntity.City.District> districtList;
 
     @BindView(R.id.tv_business_tv1)
     TextView tvRegion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business);
         city = getIntent().getStringExtra("city");
-        Log.d("TAG", "onCreate: 城市--->"+city);
+        Log.d("TAG", "onCreate: 城市--->" + city);
         ButterKnife.bind(this);
         spUtil = new SPUtil(this);
         initListView();
@@ -67,9 +73,9 @@ public class BusinessActivity extends Activity {
 
     private void initListView() {
         datas = new ArrayList<BusinessEntity.Business>();
-        adapter = new BusinessAdapter(this,datas);
-        if (!spUtil.isCloseBanner()){
-            final MyBanner myBanner = new MyBanner(this,null);
+        adapter = new BusinessAdapter(this, datas);
+        if (!spUtil.isCloseBanner()) {
+            final MyBanner myBanner = new MyBanner(this, null);
             myBanner.setOnCloseBannerListener(new MyBanner.OnCloseBannerListener() {
                 @Override
                 public void onClose() {
@@ -81,23 +87,39 @@ public class BusinessActivity extends Activity {
         }
         listView.setAdapter(adapter);
 
-        AnimationDrawable d = (AnimationDrawable)ivLoading.getDrawable();
+        AnimationDrawable d = (AnimationDrawable) ivLoading.getDrawable();
         d.start();
         listView.setEmptyView(ivLoading);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+                BusinessEntity.Business business;
+                if (spUtil.isCloseBanner()) {
+                    business = adapter.getItem(i);
+                } else {
+                    business = adapter.getItem(i - 1);
+                }
+                Intent intent = new Intent(BusinessActivity.this, DetailActivity.class);
+                intent.putExtra("business", business);
+                startActivity(intent);
+            }
+        });
+
         leftDatas = new ArrayList<String>();
-        leftAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,leftDatas);
+        leftAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, leftDatas);
         leftListView.setAdapter(leftAdapter);
 
         rightDatas = new ArrayList<String>();
-        rightAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,rightDatas);
+        rightAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, rightDatas);
         rightListView.setAdapter(rightAdapter);
 
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DistrictEntity.City.District district = districtList.get(i);
                 List<String> neighborhoods = new ArrayList<String>(district.getNeighborhoods());
-                neighborhoods.add(0,"全部"+district.getDistrict_name());
+                neighborhoods.add(0, "全部" + district.getDistrict_name());
                 rightDatas.clear();
                 rightDatas.addAll(neighborhoods);
                 rightAdapter.notifyDataSetChanged();
@@ -105,10 +127,10 @@ public class BusinessActivity extends Activity {
         });
         rightListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String region = rightAdapter.getItem(i);
-                if (i == 0){
-                    region = region.substring(2,region.length());
+                if (i == 0) {
+                    region = region.substring(2, region.length());
                 }
                 tvRegion.setText(region);
                 districtLayout.setVisibility(View.INVISIBLE);
@@ -118,8 +140,9 @@ public class BusinessActivity extends Activity {
                     public void onResponse(Call<BusinessEntity> call, Response<BusinessEntity> response) {
                         BusinessEntity businessEntity = response.body();
                         List<BusinessEntity.Business> list = businessEntity.getBusinesses();
-                        adapter.addAll(list,true);
+                        adapter.addAll(list, true);
                     }
+
                     @Override
                     public void onFailure(Call<BusinessEntity> call, Throwable throwable) {
                     }
@@ -134,11 +157,12 @@ public class BusinessActivity extends Activity {
         super.onResume();
         refresh();
     }
+
     @OnClick(R.id.tv_business_tv1)
-    public void showDistricts(View view){
-        if (districtLayout.getVisibility() != View.VISIBLE){
+    public void showDistricts(View view) {
+        if (districtLayout.getVisibility() != View.VISIBLE) {
             districtLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             districtLayout.setVisibility(View.INVISIBLE);
         }
     }
@@ -149,8 +173,9 @@ public class BusinessActivity extends Activity {
             public void onResponse(Call<BusinessEntity> call, Response<BusinessEntity> response) {
                 BusinessEntity businessBean = response.body();
                 List<BusinessEntity.Business> list = businessBean.getBusinesses();
-                adapter.addAll(list,true);
+                adapter.addAll(list, true);
             }
+
             @Override
             public void onFailure(Call<BusinessEntity> call, Throwable throwable) {
             }
@@ -161,7 +186,7 @@ public class BusinessActivity extends Activity {
                 DistrictEntity districtEntity = response.body();
                 districtList = districtEntity.getCities().get(0).getDistricts();
                 List<String> districtNames = new ArrayList<String>();
-                for (int i = 0;i < districtList.size();i++){
+                for (int i = 0; i < districtList.size(); i++) {
                     DistrictEntity.City.District district = districtList.get(i);
                     districtNames.add(district.getDistrict_name());
                 }
@@ -171,7 +196,8 @@ public class BusinessActivity extends Activity {
 
                 List<String> neighborhoods = new ArrayList<String>(districtList.get(0).getNeighborhoods());
                 String districtName = districtList.get(0).getDistrict_name();
-                neighborhoods.add(0,"全部"+districtName);
+                neighborhoods.add(0, "全部" + districtName);
+
                 rightDatas.clear();
                 rightDatas.addAll(neighborhoods);
                 rightAdapter.notifyDataSetChanged();

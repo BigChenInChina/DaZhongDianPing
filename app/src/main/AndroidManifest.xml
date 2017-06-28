@@ -22,7 +22,8 @@
         <activity android:name=".UI.GuideActivity" />
         <activity android:name=".UI.CityActivity" />
         <activity android:name=".UI.SearchActivity" />
-        <activity android:name=".UI.BusinessActivity"></activity>
+        <activity android:name=".UI.BusinessActivity" />
+        <activity android:name=".UI.DetailActivity"></activity>
     </application>
 
 </manifest>

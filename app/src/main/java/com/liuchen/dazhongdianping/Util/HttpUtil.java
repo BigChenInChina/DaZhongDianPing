@@ -1,5 +1,7 @@
 package com.liuchen.dazhongdianping.Util;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -15,8 +17,11 @@ import com.squareup.picasso.Picasso;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -89,10 +94,9 @@ public class HttpUtil {
         try {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("appkey=").append(appKey).append("&sign=").append(sign);
-            for (Map.Entry<String, String> entry : params.entrySet())
-            {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
                 stringBuilder.append('&').append(entry.getKey()).append('=').append
-                        (URLEncoder.encode(entry.getValue(),"utf-8"));
+                        (URLEncoder.encode(entry.getValue(), "utf-8"));
             }
             String queryString = stringBuilder.toString();
 
@@ -102,15 +106,16 @@ public class HttpUtil {
             throw new RuntimeException("使用了不正确的字符集名称");
         }
     }
-    public static void testHttpURLConnection(){
+
+    public static void testHttpURLConnection() {
 
         //获取符合大众点评要求的请求地址
-        Map<String,String> params = new HashMap<String,String>();
-        params.put("city","广州");
-        params.put("category","美食");
-        final String url = getURL("http://api.dianping.com/v1/business/find_businesses",params);
-        Log.d("TAG", "生成的网络请求地址是："+url);
-        new Thread(){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("city", "广州");
+        params.put("category", "美食");
+        final String url = getURL("http://api.dianping.com/v1/business/find_businesses", params);
+        Log.d("TAG", "生成的网络请求地址是：" + url);
+        new Thread() {
             @Override
             public void run() {
                 try {
@@ -124,12 +129,12 @@ public class HttpUtil {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     StringBuilder sb = new StringBuilder();
                     String line = null;
-                    while ((line = reader.readLine())!=null){
+                    while ((line = reader.readLine()) != null) {
                         sb.append(line);
                     }
                     reader.close();
                     String response = sb.toString();
-                    Log.d("TAG", "HttpURLConnection获得的服务器响应内容："+response);
+                    Log.d("TAG", "HttpURLConnection获得的服务器响应内容：" + response);
 
 
                 } catch (Exception e) {
@@ -138,46 +143,81 @@ public class HttpUtil {
             }
         }.start();
     }
-    public static void testVolley(){
+
+    public static void testVolley() {
         VolleyClient.getInstance().test();
     }
-    public static void testRetrofit(){
+
+    public static void testRetrofit() {
         RetrofitClient.getInstance().test();
     }
-    public static void getDailyDealsByVolley(String city, Response.Listener<TuanEntity> listener){
-        VolleyClient.getInstance().getDailyDeals2(city,listener);
+
+    public static void getDailyDealsByVolley(String city, Response.Listener<TuanEntity> listener) {
+        VolleyClient.getInstance().getDailyDeals2(city, listener);
     }
-    public static void getDailyDealsByRetrofit(String city, Callback<TuanEntity> callback){
-        RetrofitClient.getInstance().getDailyDeals3(city,callback);
+
+    public static void getDailyDealsByRetrofit(String city, Callback<TuanEntity> callback) {
+        RetrofitClient.getInstance().getDailyDeals3(city, callback);
     }
-    public static void loadImage(String url, ImageView iv){
-        VolleyClient.getInstance().loadImage(url,iv);
+
+    public static void loadImage(String url, ImageView iv) {
+        VolleyClient.getInstance().loadImage(url, iv);
     }
-    public static void displayImage(String url,ImageView iv){
-        Picasso.with(MyApp.CONTEXT).load(url).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).
+
+    public static void displayImage(String url, ImageView iv) {
+        Picasso.with(MyApp.CONTEXT).load(url).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).
                 placeholder(R.drawable.bucket_no_picture).error(R.drawable.error404).into(iv);
     }
-    public static void getCitiesByRetrofit(Callback<CityEntity> callback){
+
+    public static void getCitiesByRetrofit(Callback<CityEntity> callback) {
         RetrofitClient.getInstance().getCities(callback);
     }
-    public static void getCitiesByVolley(Response.Listener<String> listener){
+
+    public static void getCitiesByVolley(Response.Listener<String> listener) {
         VolleyClient.getInstance().getCities(listener);
     }
-    public static void getFoodsByVolley(String city, String region, Response.Listener<String> listener){
-        VolleyClient.getInstance().getFoods(city,region,listener);
+
+    public static void getFoodsByVolley(String city, String region, Response.Listener<String> listener) {
+        VolleyClient.getInstance().getFoods(city, region, listener);
     }
 
-    public static void getFoodsByRetrofit(String city, String region, Callback<BusinessEntity> callback){
-        RetrofitClient.getInstance().getFoods(city,region,callback);
-    }
-    public static void getDistrictsByVolley(String city, Response.Listener<String> listener){
-
-        VolleyClient.getInstance().getDistricts(city,listener);
-
+    public static void getFoodsByRetrofit(String city, String region, Callback<BusinessEntity> callback) {
+        RetrofitClient.getInstance().getFoods(city, region, callback);
     }
 
-    public static void getDistrictsByRetrofit(String city, Callback<DistrictEntity> callback){
-        RetrofitClient.getInstance().getDistricts(city,callback);
+    public static void getDistrictsByVolley(String city, Response.Listener<String> listener) {
+
+        VolleyClient.getInstance().getDistricts(city, listener);
+
+    }
+
+    public static void getDistrictsByRetrofit(String city, Callback<DistrictEntity> callback) {
+        RetrofitClient.getInstance().getDistricts(city, callback);
+    }
+
+    public static void getComment(final String url, final OnResponseListener<Document> listener) {
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    final Document document = Jsoup.connect(url).get();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onResponse(document);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    public interface OnResponseListener<T> {
+        void onResponse(T t);
     }
 
 }

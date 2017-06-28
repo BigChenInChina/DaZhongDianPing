@@ -23,7 +23,8 @@
             android:layout_height="40dp"
             android:layout_marginLeft="3dp"
             android:text="酆都（阎罗殿）"
-            android:textSize="25sp" />
+            android:maxLines="1"
+            android:textSize="23sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
